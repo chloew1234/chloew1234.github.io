@@ -28,13 +28,13 @@
 
 html { scroll-behavior: smooth; }
 .hero-photo {
-  width: 100px; height: 100px; border-radius: 50%;
+  width: 130px; height: 130px; border-radius: 12px;
   object-fit: cover; object-position: center top;
-  border: 2px solid var(--border);
+  border: 1px solid var(--border);
   flex-shrink: 0;
 }
 
-body { font-family: var(--sans); background: var(--bg); color: var(--ink); font-size: 15px; line-height: 1.6; }
+body { font-family: var(--sans); background: var(--bg); color: var(--ink); font-size: 17px; line-height: 1.6; }
 
 /* ── NAV ── */
 nav {
@@ -79,13 +79,13 @@ nav {
 .hero-name-row { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 1.2rem; }
 .hero h1 {
   font-family: var(--sans); font-weight: 600;
-  font-size: clamp(2.4rem, 5vw, 4rem);
+  font-size: clamp(3rem, 6vw, 5rem);
   line-height: 1.08; letter-spacing: -0.03em;
   margin-bottom: 0;
 }
 .hero h1 em { font-style: italic; font-weight: 300; color: var(--ink2); }
 .hero-bio {
-  font-size: 0.92rem; color: var(--ink2); max-width: 480px;
+  font-size: 1rem; color: var(--ink2); max-width: 480px;
   line-height: 1.8; font-weight: 300; margin-bottom: 1.8rem;
 }
 .hero-cta { display: flex; gap: 10px; }
@@ -113,7 +113,7 @@ nav {
   font-family: var(--mono); font-size: 2rem; font-weight: 500;
   color: var(--accent); line-height: 1;
 }
-.stat-label { font-size: 0.75rem; color: var(--ink2); margin-top: 6px; line-height: 1.6; font-weight: 300; }
+.stat-label { font-size: 0.82rem; color: var(--ink2); margin-top: 6px; line-height: 1.6; font-weight: 300; }
 
 /* ── SECTION ── */
 section { border-bottom: 1px solid var(--border); }
@@ -182,15 +182,17 @@ section { border-bottom: 1px solid var(--border); }
 .skills-grid { display: grid; grid-template-columns: 160px 1fr; gap: 2rem; }
 .skills-body { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
 .skill-group-title {
-  font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.08em;
+  font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.08em;
   color: var(--ink3); text-transform: uppercase; margin-bottom: 0.8rem;
   padding-bottom: 0.5rem; border-bottom: 1px solid var(--border);
 }
-.skill-list { display: flex; flex-direction: column; gap: 6px; }
-.skill-item { display: flex; align-items: center; gap: 10px; }
-.skill-name { font-size: 0.78rem; color: var(--ink2); flex: 1; }
-.skill-bar-bg { width: 60px; height: 3px; background: var(--bg3); }
-.skill-bar { height: 3px; background: var(--accent); }
+.skill-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+.spill {
+  font-size: 0.82rem; padding: 5px 12px;
+  border: 1px solid var(--border); color: var(--ink2);
+  background: var(--card); border-radius: 3px;
+  font-family: var(--mono);
+}
 
 /* ── EDUCATION ── */
 .edu-row {
@@ -282,22 +284,22 @@ footer {
   </div>
   <div class="hero-right">
     <div class="stat-block" style="padding-bottom:1rem;">
-      <div style="font-family:var(--mono);font-size:0.65rem;color:var(--ink3);letter-spacing:0.12em;text-transform:uppercase;">What I bring</div>
+      <div style="font-family:var(--mono);font-size:0.72rem;color:var(--ink3);letter-spacing:0.12em;text-transform:uppercase;">What I bring</div>
     </div>
     <div class="stat-block">
-      <div style="font-family:var(--mono);font-size:0.68rem;color:var(--accent);letter-spacing:0.06em;margin-bottom:5px;">STATS + ECON RIGOR</div>
+      <div style="font-family:var(--mono);font-size:0.76rem;color:var(--accent);letter-spacing:0.06em;margin-bottom:6px;">STATS + ECON RIGOR</div>
       <div class="stat-label">Regression, causal inference, hypothesis testing — I ask the right question before touching the data, not after.</div>
     </div>
     <div class="stat-block">
-      <div style="font-family:var(--mono);font-size:0.68rem;color:var(--accent);letter-spacing:0.06em;margin-bottom:5px;">AI &amp; LLM WORKFLOWS</div>
+      <div style="font-family:var(--mono);font-size:0.76rem;color:var(--accent);letter-spacing:0.06em;margin-bottom:6px;">AI &amp; LLM WORKFLOWS</div>
       <div class="stat-label">Built multi-tool LLM agents with LangGraph and GPT-4o. Can bridge data analysis and AI automation — a rare combo.</div>
     </div>
     <div class="stat-block">
-      <div style="font-family:var(--mono);font-size:0.68rem;color:var(--accent);letter-spacing:0.06em;margin-bottom:5px;">BUSINESS CONTEXT</div>
+      <div style="font-family:var(--mono);font-size:0.76rem;color:var(--accent);letter-spacing:0.06em;margin-bottom:6px;">BUSINESS CONTEXT</div>
       <div class="stat-label">3 internships across VC, finance, and AI startups. I connect findings to real decisions, not just notebooks.</div>
     </div>
     <div class="stat-block">
-      <div style="font-family:var(--mono);font-size:0.68rem;color:var(--accent);letter-spacing:0.06em;margin-bottom:5px;">CLEAR COMMUNICATION</div>
+      <div style="font-family:var(--mono);font-size:0.76rem;color:var(--accent);letter-spacing:0.06em;margin-bottom:6px;">CLEAR COMMUNICATION</div>
       <div class="stat-label">Economics background means I translate complex models into plain language that non-technical stakeholders actually act on.</div>
     </div>
   </div>
@@ -424,39 +426,47 @@ footer {
 
         <div>
           <div class="skill-group-title">Analytics &amp; Data</div>
-          <div class="skill-list">
-            <div class="skill-item"><span class="skill-name">Python (pandas, NumPy)</span><div class="skill-bar-bg"><div class="skill-bar" style="width:90%"></div></div></div>
-            <div class="skill-item"><span class="skill-name">SQL (MySQL / SQLite)</span><div class="skill-bar-bg"><div class="skill-bar" style="width:80%"></div></div></div>
-            <div class="skill-item"><span class="skill-name">Tableau / Looker</span><div class="skill-bar-bg"><div class="skill-bar" style="width:75%"></div></div></div>
-            <div class="skill-item"><span class="skill-name">Excel</span><div class="skill-bar-bg"><div class="skill-bar" style="width:80%"></div></div></div>
+          <div class="skill-pills">
+            <span class="spill">Python</span>
+            <span class="spill">pandas</span>
+            <span class="spill">NumPy</span>
+            <span class="spill">SQL</span>
+            <span class="spill">Tableau</span>
+            <span class="spill">Looker Studio</span>
+            <span class="spill">Excel</span>
           </div>
         </div>
 
         <div>
           <div class="skill-group-title">Machine Learning</div>
-          <div class="skill-list">
-            <div class="skill-item"><span class="skill-name">scikit-learn</span><div class="skill-bar-bg"><div class="skill-bar" style="width:80%"></div></div></div>
-            <div class="skill-item"><span class="skill-name">statsmodels</span><div class="skill-bar-bg"><div class="skill-bar" style="width:75%"></div></div></div>
-            <div class="skill-item"><span class="skill-name">Regression / Classification</span><div class="skill-bar-bg"><div class="skill-bar" style="width:80%"></div></div></div>
-            <div class="skill-item"><span class="skill-name">Causal Inference</span><div class="skill-bar-bg"><div class="skill-bar" style="width:65%"></div></div></div>
+          <div class="skill-pills">
+            <span class="spill">scikit-learn</span>
+            <span class="spill">statsmodels</span>
+            <span class="spill">Regression</span>
+            <span class="spill">Classification</span>
+            <span class="spill">Causal Inference</span>
+            <span class="spill">Hypothesis Testing</span>
           </div>
         </div>
 
         <div>
           <div class="skill-group-title">LLM / Agentic</div>
-          <div class="skill-list">
-            <div class="skill-item"><span class="skill-name">LangGraph / LangChain</span><div class="skill-bar-bg"><div class="skill-bar" style="width:75%"></div></div></div>
-            <div class="skill-item"><span class="skill-name">OpenAI API (GPT-4o)</span><div class="skill-bar-bg"><div class="skill-bar" style="width:80%"></div></div></div>
-            <div class="skill-item"><span class="skill-name">Prompt Engineering</span><div class="skill-bar-bg"><div class="skill-bar" style="width:85%"></div></div></div>
-            <div class="skill-item"><span class="skill-name">RAG / ReAct</span><div class="skill-bar-bg"><div class="skill-bar" style="width:70%"></div></div></div>
+          <div class="skill-pills">
+            <span class="spill">LangGraph</span>
+            <span class="spill">LangChain</span>
+            <span class="spill">OpenAI API</span>
+            <span class="spill">GPT-4o</span>
+            <span class="spill">Prompt Engineering</span>
+            <span class="spill">RAG</span>
+            <span class="spill">ReAct</span>
           </div>
         </div>
 
         <div>
           <div class="skill-group-title">Education</div>
-          <div style="font-size:0.8rem; color:var(--ink2); line-height:1.8; font-weight:300;">
+          <div style="font-size:0.9rem; color:var(--ink2); line-height:1.8; font-weight:300;">
             <strong style="font-weight:500;">New York University</strong><br>
-            <span style="font-family:var(--mono);font-size:0.7rem;color:var(--accent);">B.A. Data Science &amp; Economics · 2026</span><br><br>
+            <span style="font-family:var(--mono);font-size:0.78rem;color:var(--accent);">B.A. Data Science &amp; Economics · 2026</span><br><br>
             Intro to LLMs · Machine Learning · Principles of Data Science · Data Management · Causal Inference · Econometrics · Statistics &amp; Probability · Linear Algebra · Data Structures
           </div>
         </div>
