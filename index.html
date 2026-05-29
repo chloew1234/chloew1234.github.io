@@ -28,7 +28,7 @@
 
 html { scroll-behavior: smooth; }
 .hero-photo {
-  width: 130px; height: 130px; border-radius: 12px;
+  width: 160px; height: 160px; border-radius: 12px;
   object-fit: cover; object-position: center top;
   border: 1px solid var(--border);
   flex-shrink: 0;
@@ -61,32 +61,32 @@ nav {
 /* ── HERO ── */
 .hero {
   display: grid;
-  grid-template-columns: 1fr 260px;
+  grid-template-columns: 1fr 300px;
   gap: 0;
   min-height: auto;
   border-bottom: 1px solid var(--border);
 }
 .hero-left {
-  padding: 3rem 2.5rem 3rem;
+  padding: 4rem 3rem;
   border-right: 1px solid var(--border);
   display: flex; flex-direction: column; justify-content: center;
 }
 .hero-label {
-  font-family: var(--mono); font-size: 0.7rem; color: var(--ink3);
-  letter-spacing: 0.08em; margin-bottom: 1.2rem;
+  font-family: var(--mono); font-size: 0.85rem; color: var(--ink3);
+  letter-spacing: 0.08em; margin-bottom: 1.5rem;
 }
 .hero-label span { color: var(--accent); }
-.hero-name-row { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 1.2rem; }
+.hero-name-row { display: flex; align-items: center; gap: 2rem; margin-bottom: 1.5rem; }
 .hero h1 {
   font-family: var(--sans); font-weight: 600;
-  font-size: clamp(3rem, 6vw, 5rem);
-  line-height: 1.08; letter-spacing: -0.03em;
+  font-size: clamp(3.5rem, 7vw, 6rem);
+  line-height: 1.05; letter-spacing: -0.03em;
   margin-bottom: 0;
 }
 .hero h1 em { font-style: italic; font-weight: 300; color: var(--ink2); }
 .hero-bio {
-  font-size: 1rem; color: var(--ink2); max-width: 480px;
-  line-height: 1.8; font-weight: 300; margin-bottom: 1.8rem;
+  font-size: 1.1rem; color: var(--ink2); max-width: 540px;
+  line-height: 1.8; font-weight: 300; margin-bottom: 2rem;
 }
 .hero-cta { display: flex; gap: 10px; }
 .btn {
@@ -103,9 +103,9 @@ nav {
 .btn-ghost:hover { border-color: var(--ink); }
 
 /* hero right — stat column */
-.hero-right { padding: 1.5rem 1.5rem; display: flex; flex-direction: column; gap: 0; }
+.hero-right { padding: 2rem; display: flex; flex-direction: column; gap: 0; }
 .stat-block {
-  padding: 1rem 0;
+  padding: 1.2rem 0;
   border-bottom: 1px solid var(--border);
 }
 .stat-block:last-child { border-bottom: none; }
@@ -113,22 +113,22 @@ nav {
   font-family: var(--mono); font-size: 2rem; font-weight: 500;
   color: var(--accent); line-height: 1;
 }
-.stat-label { font-size: 0.82rem; color: var(--ink2); margin-top: 6px; line-height: 1.6; font-weight: 300; }
+.stat-label { font-size: 0.9rem; color: var(--ink2); margin-top: 6px; line-height: 1.6; font-weight: 300; }
 
 /* ── SECTION ── */
 section { border-bottom: 1px solid var(--border); }
-.section-inner { padding: 4rem 2.5rem; }
+.section-inner { padding: 4rem 3rem; }
 .section-header {
   display: grid; grid-template-columns: 160px 1fr;
   gap: 2rem; margin-bottom: 3rem; align-items: baseline;
 }
 .section-num {
-  font-family: var(--mono); font-size: 0.68rem;
+  font-family: var(--mono); font-size: 0.8rem;
   color: var(--ink3); letter-spacing: 0.1em;
 }
 .section-title {
   font-family: var(--sans); font-weight: 600;
-  font-size: 1.3rem; letter-spacing: -0.02em;
+  font-size: 1.5rem; letter-spacing: -0.02em;
 }
 
 /* ── PROJECTS ── */
@@ -142,21 +142,21 @@ section { border-bottom: 1px solid var(--border); }
 }
 .proj-row:hover { background: var(--bg2); margin: 0 -2.5rem; padding: 2rem 2.5rem; }
 .proj-meta { padding-top: 3px; }
-.proj-index { font-family: var(--mono); font-size: 0.68rem; color: var(--ink3); }
-.proj-year { font-family: var(--mono); font-size: 0.68rem; color: var(--ink3); margin-top: 4px; }
+.proj-index { font-family: var(--mono); font-size: 0.8rem; color: var(--ink3); }
+.proj-year { font-family: var(--mono); font-size: 0.8rem; color: var(--ink3); margin-top: 4px; }
 .proj-main {}
-.proj-title-row { display: flex; align-items: baseline; gap: 12px; margin-bottom: 0.5rem; }
-.proj-title { font-weight: 600; font-size: 1rem; letter-spacing: -0.01em; }
+.proj-title-row { display: flex; align-items: baseline; gap: 12px; margin-bottom: 0.6rem; }
+.proj-title { font-weight: 600; font-size: 1.15rem; letter-spacing: -0.01em; }
 .proj-link {
-  font-family: var(--mono); font-size: 0.65rem; color: var(--accent);
+  font-family: var(--mono); font-size: 0.78rem; color: var(--accent);
   text-decoration: none; border-bottom: 1px solid var(--accent-light);
   padding-bottom: 1px; transition: border-color 0.12s;
 }
 .proj-link:hover { border-color: var(--accent); }
-.proj-desc { font-size: 0.83rem; color: var(--ink2); line-height: 1.75; font-weight: 300; margin-bottom: 0.8rem; }
+.proj-desc { font-size: 0.95rem; color: var(--ink2); line-height: 1.75; font-weight: 300; margin-bottom: 0.8rem; }
 .proj-tags { display: flex; flex-wrap: wrap; gap: 6px; }
 .tag {
-  font-family: var(--mono); font-size: 0.62rem; padding: 3px 8px;
+  font-family: var(--mono); font-size: 0.72rem; padding: 4px 10px;
   border: 1px solid var(--border); color: var(--ink2); background: var(--bg);
 }
 .tag.hi { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
@@ -168,15 +168,15 @@ section { border-bottom: 1px solid var(--border); }
   gap: 2rem; padding: 2rem 0;
   border-top: 1px solid var(--border);
 }
-.exp-period { font-family: var(--mono); font-size: 0.68rem; color: var(--ink3); line-height: 1.6; padding-top: 3px; }
-.exp-role { font-weight: 600; font-size: 0.95rem; }
-.exp-company { font-family: var(--mono); font-size: 0.72rem; color: var(--accent); margin-top: 3px; margin-bottom: 0.6rem; }
+.exp-period { font-family: var(--mono); font-size: 0.8rem; color: var(--ink3); line-height: 1.6; padding-top: 3px; }
+.exp-role { font-weight: 600; font-size: 1.1rem; }
+.exp-company { font-family: var(--mono); font-size: 0.82rem; color: var(--accent); margin-top: 3px; margin-bottom: 0.6rem; }
 .exp-bullets { list-style: none; display: flex; flex-direction: column; gap: 5px; }
 .exp-bullets li {
-  font-size: 0.8rem; color: var(--ink2); line-height: 1.7;
+  font-size: 0.92rem; color: var(--ink2); line-height: 1.7;
   font-weight: 300; padding-left: 14px; position: relative;
 }
-.exp-bullets li::before { content: '▸'; position: absolute; left: 0; color: var(--accent); font-size: 0.55rem; top: 5px; }
+.exp-bullets li::before { content: '▸'; position: absolute; left: 0; color: var(--accent); font-size: 0.6rem; top: 5px; }
 
 /* ── SKILLS ── */
 .skills-grid { display: grid; grid-template-columns: 160px 1fr; gap: 2rem; }
@@ -284,22 +284,22 @@ footer {
   </div>
   <div class="hero-right">
     <div class="stat-block" style="padding-bottom:1rem;">
-      <div style="font-family:var(--mono);font-size:0.72rem;color:var(--ink3);letter-spacing:0.12em;text-transform:uppercase;">What I bring</div>
+      <div style="font-family:var(--mono);font-size:0.82rem;color:var(--ink3);letter-spacing:0.12em;text-transform:uppercase;">What I bring</div>
     </div>
     <div class="stat-block">
-      <div style="font-family:var(--mono);font-size:0.76rem;color:var(--accent);letter-spacing:0.06em;margin-bottom:6px;">STATS + ECON RIGOR</div>
+      <div style="font-family:var(--mono);font-size:0.85rem;color:var(--accent);letter-spacing:0.06em;margin-bottom:8px;">STATS + ECON RIGOR</div>
       <div class="stat-label">Regression, causal inference, hypothesis testing — I ask the right question before touching the data, not after.</div>
     </div>
     <div class="stat-block">
-      <div style="font-family:var(--mono);font-size:0.76rem;color:var(--accent);letter-spacing:0.06em;margin-bottom:6px;">AI &amp; LLM WORKFLOWS</div>
+      <div style="font-family:var(--mono);font-size:0.85rem;color:var(--accent);letter-spacing:0.06em;margin-bottom:8px;">AI &amp; LLM WORKFLOWS</div>
       <div class="stat-label">Built multi-tool LLM agents with LangGraph and GPT-4o. Can bridge data analysis and AI automation — a rare combo.</div>
     </div>
     <div class="stat-block">
-      <div style="font-family:var(--mono);font-size:0.76rem;color:var(--accent);letter-spacing:0.06em;margin-bottom:6px;">BUSINESS CONTEXT</div>
+      <div style="font-family:var(--mono);font-size:0.85rem;color:var(--accent);letter-spacing:0.06em;margin-bottom:8px;">BUSINESS CONTEXT</div>
       <div class="stat-label">3 internships across VC, finance, and AI startups. I connect findings to real decisions, not just notebooks.</div>
     </div>
     <div class="stat-block">
-      <div style="font-family:var(--mono);font-size:0.76rem;color:var(--accent);letter-spacing:0.06em;margin-bottom:6px;">CLEAR COMMUNICATION</div>
+      <div style="font-family:var(--mono);font-size:0.85rem;color:var(--accent);letter-spacing:0.06em;margin-bottom:8px;">CLEAR COMMUNICATION</div>
       <div class="stat-label">Economics background means I translate complex models into plain language that non-technical stakeholders actually act on.</div>
     </div>
   </div>
@@ -345,7 +345,7 @@ footer {
         <div class="proj-main">
           <div class="proj-title-row">
             <div class="proj-title">NestAI — Agentic Apartment Finder</div>
-            <a href="#" class="proj-link">GitHub ↗</a>
+            <a href="https://github.com/chloew1234/nestai-apartment-finder" target="_blank" class="proj-link">GitHub ↗</a>
           </div>
           <p class="proj-desc">End-to-end AI apartment recommendation agent using LangGraph and a ReAct (Reason + Act) loop. GPT-4o-mini autonomously calls 8 tools, adapts search strategy, and ranks NYC Airbnb listings from plain-English queries. Structured LLM preference parser extracts hard and soft constraints; deployed as a Flask web app with Google Maps transit enrichment.</p>
           <div class="proj-tags">
