@@ -363,6 +363,74 @@ footer {
         </div>
       </div>
 
+      <div class="proj-row">
+        <div class="proj-meta">
+          <div class="proj-index">#03</div>
+          <div class="proj-year">Jul 2026</div>
+        </div>
+        <div class="proj-main">
+          <div class="proj-title-row">
+            <div class="proj-title">NYC 311 — Live Data Cleaning &amp; Dashboard</div>
+            <a href="https://github.com/chloew1234/nyc311-live-data" target="_blank" class="proj-link">GitHub ↗</a>
+          </div>
+          <p class="proj-desc">End-to-end pipeline on real, live data from NYC's public 311 API — not a pre-cleaned Kaggle set. Pulled and audited a live snapshot (~1,100 requests), found and fixed real quality issues (54% missing close-dates as a status signal not a gap, fragmented complaint categories collapsed into readable buckets, bad response-time outliers), then shipped the analysis as a documented notebook, an interactive Streamlit dashboard, and a Tableau-ready extract.</p>
+          <div class="proj-tags">
+            <span class="tag hi">Python</span>
+            <span class="tag hi">pandas</span>
+            <span class="tag">Streamlit</span>
+            <span class="tag">Tableau</span>
+            <span class="tag">REST API</span>
+            <span class="tag">Data Cleaning</span>
+            <span class="tag">Jupyter</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="proj-row">
+        <div class="proj-meta">
+          <div class="proj-index">#04</div>
+          <div class="proj-year">Jul 2026</div>
+        </div>
+        <div class="proj-main">
+          <div class="proj-title-row">
+            <div class="proj-title">NYC DOB Permit Filings — Commercial Data Analysis</div>
+            <a href="https://github.com/chloew1234/nyc-dob-permits" target="_blank" class="proj-link">GitHub ↗</a>
+          </div>
+          <p class="proj-desc">Cleaned and analyzed 2,350+ real construction-permit filings from NYC's public Buildings Department API through a commercial/business lens. Root-caused a systematic $0-declared-cost pattern to job type rather than treating it as broken data, distinguished MNAR nulls (dwelling units, permit-issued dates) from real gaps, and surfaced a volume-vs-value finding — Manhattan files far fewer permits than Brooklyn but accounts for the largest share of declared construction investment. Shipped as a notebook, Streamlit dashboard, and Tableau-ready extract.</p>
+          <div class="proj-tags">
+            <span class="tag hi">Python</span>
+            <span class="tag hi">pandas</span>
+            <span class="tag">Streamlit</span>
+            <span class="tag">Tableau</span>
+            <span class="tag">REST API</span>
+            <span class="tag">Data Cleaning</span>
+            <span class="tag">Jupyter</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="proj-row">
+        <div class="proj-meta">
+          <div class="proj-index">#05</div>
+          <div class="proj-year">Jul 2026</div>
+        </div>
+        <div class="proj-main">
+          <div class="proj-title-row">
+            <div class="proj-title">UK Online Retail — Transaction Analysis</div>
+            <a href="https://github.com/chloew1234/online-retail-analysis" target="_blank" class="proj-link">GitHub ↗</a>
+          </div>
+          <p class="proj-desc">Cleaned and analyzed 2,050 real e-commerce order line items from a UK online gift retailer. Caught a silent product-rollup bug from inconsistent StockCode casing, distinguished cancellations and non-product service lines (postage, discounts) from true product revenue instead of applying a blanket filter, and quantified a guest-vs-identified-customer revenue split relevant to loyalty-program reach. Shipped as a notebook, Streamlit dashboard, and Tableau-ready extract.</p>
+          <div class="proj-tags">
+            <span class="tag hi">Python</span>
+            <span class="tag hi">pandas</span>
+            <span class="tag">Streamlit</span>
+            <span class="tag">Tableau</span>
+            <span class="tag">Data Cleaning</span>
+            <span class="tag">Jupyter</span>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
