@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Application Tracker — Chloe</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #f7f7f5; --bg2: #efefeb; --card: #fff;
+  --ink: #111; --ink2: #555; --ink3: #999;
+  --accent: #0a3d62; --accent-light: #e8eff6;
+  --border: rgba(0,0,0,0.09);
+  --mono: 'IBM Plex Mono', monospace;
+  --sans: 'IBM Plex Sans', sans-serif;
+}
+body { font-family: var(--sans); background: var(--bg); color: var(--ink); min-height: 100vh; font-size: 16px; }
+
+/* HEADER */
+header {
+  background: var(--accent); padding: 1.2rem 2rem;
+  display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;
+}
+header h1 { font-size: 1.15rem; font-weight: 600; color: #fff; letter-spacing: -0.02em; }
+header p { font-family: var(--mono); font-size: 0.78rem; color: rgba(255,255,255,0.5); margin-top: 2px; }
+.header-stats { display: flex; gap: 1.5rem; }
+.hstat { text-align: center; }
+.hstat-num { font-family: var(--mono); font-size: 1.6rem; font-weight: 500; color: #fff; line-height: 1; }
+.hstat-lbl { font-family: var(--mono); font-size: 0.72rem; color: rgba(255,255,255,0.5); margin-top: 2px; letter-spacing: 0.06em; }
+
+/* TOOLBAR */
+.toolbar {
+  background: var(--card); border-bottom: 1px solid var(--border);
+  padding: 0.8rem 2rem; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
+}
+.btn-add {
+  background: var(--accent); color: #fff; border: none;
+  padding: 9px 18px; font-family: var(--mono); font-size: 0.82rem;
+  font-weight: 500; cursor: pointer; border-radius: 3px; letter-spacing: 0.04em;
+  transition: background 0.15s;
+}
+.btn-add:hover { background: #0d4f7e; }
+.filter-select {
+  font-family: var(--mono); font-size: 0.82rem; color: var(--ink2);
+  border: 1px solid var(--border); background: var(--bg);
+  padding: 7px 10px; border-radius: 3px; cursor: pointer;
+}
+.search-input {
+  font-family: var(--mono); font-size: 0.82rem; color: var(--ink);
+  border: 1px solid var(--border); background: var(--bg);
+  padding: 7px 12px; border-radius: 3px; width: 200px;
+  outline: none;
+}
+.search-input:focus { border-color: var(--accent); }
+.toolbar-right { margin-left: auto; font-family: var(--mono); font-size: 0.8rem; color: var(--ink3); }
+
+/* TABLE */
+.table-wrap { padding: 1.5rem 2rem; overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; min-width: 800px; }
+thead tr { border-bottom: 2px solid var(--border); }
+th {
+  text-align: left; padding: 0.7rem 0.9rem;
+  font-family: var(--mono); font-size: 0.78rem;
+  color: var(--ink3); font-weight: 400; letter-spacing: 0.08em;
+  text-transform: uppercase; cursor: pointer; white-space: nowrap;
+  user-select: none;
+}
+th:hover { color: var(--ink); }
+tbody tr {
+  border-bottom: 1px solid var(--border);
+  transition: background 0.1s;
+}
+tbody tr:hover { background: var(--bg); }
+td { padding: 0.9rem 0.9rem; font-size: 0.92rem; vertical-align: middle; }
+.td-company { font-weight: 500; font-size: 0.95rem; }
+.td-role { color: var(--ink2); font-weight: 300; max-width: 200px; }
+.td-date { font-family: var(--mono); font-size: 0.82rem; color: var(--ink3); white-space: nowrap; }
+.td-notes { color: var(--ink2); font-weight: 300; font-size: 0.88rem; max-width: 180px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.td-actions { display: flex; gap: 6px; }
+.btn-edit, .btn-del {
+  font-family: var(--mono); font-size: 0.75rem; padding: 5px 10px;
+  border-radius: 2px; cursor: pointer; border: 1px solid var(--border);
+  background: transparent; transition: background 0.1s;
+}
+.btn-edit:hover { background: var(--accent-light); border-color: var(--accent); color: var(--accent); }
+.btn-del:hover { background: #fde8e3; border-color: #c94f2b; color: #c94f2b; }
+.td-link a { font-family: var(--mono); font-size: 0.78rem; color: var(--accent); text-decoration: none; }
+.td-link a:hover { text-decoration: underline; }
+
+/* STATUS BADGE */
+.status {
+  display: inline-block; font-family: var(--mono); font-size: 0.75rem;
+  padding: 3px 8px; border-radius: 2px; white-space: nowrap; font-weight: 500;
+}
+.s-applied { background: var(--accent-light); color: var(--accent); }
+.s-interview { background: #e8f5ec; color: #1a6b3a; }
+.s-offer { background: #d4edda; color: #155724; }
+.s-rejected { background: #f8f0f0; color: #999; }
+.s-ghosted { background: var(--bg2); color: var(--ink3); }
+.s-saved { background: #fff8e1; color: #856404; }
+
+/* EMPTY STATE */
+.empty {
+  text-align: center; padding: 4rem 2rem; color: var(--ink3);
+}
+.empty-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+.empty h3 { font-size: 0.95rem; color: var(--ink2); margin-bottom: 0.5rem; }
+.empty p { font-size: 0.8rem; font-weight: 300; }
+
+/* MODAL */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.4);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 100; opacity: 0; pointer-events: none; transition: opacity 0.2s;
+}
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal {
+  background: var(--card); border-radius: 6px; padding: 1.8rem;
+  width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto;
+  transform: translateY(10px); transition: transform 0.2s;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+}
+.modal-overlay.open .modal { transform: translateY(0); }
+.modal h2 { font-size: 1.1rem; font-weight: 600; margin-bottom: 1.2rem; letter-spacing: -0.01em; }
+.field { margin-bottom: 1rem; }
+.field label { display: block; font-family: var(--mono); font-size: 0.78rem; color: var(--ink3); letter-spacing: 0.08em; margin-bottom: 6px; text-transform: uppercase; }
+.field input, .field select, .field textarea {
+  width: 100%; font-family: var(--sans); font-size: 0.95rem;
+  border: 1px solid var(--border); padding: 8px 10px; border-radius: 3px;
+  background: var(--bg); color: var(--ink); outline: none;
+  transition: border-color 0.15s;
+}
+.field input:focus, .field select:focus, .field textarea:focus { border-color: var(--accent); background: #fff; }
+.field textarea { resize: vertical; min-height: 70px; }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.modal-footer { display: flex; gap: 8px; justify-content: flex-end; margin-top: 1.5rem; }
+.btn-cancel {
+  background: transparent; border: 1px solid var(--border); color: var(--ink2);
+  padding: 8px 16px; font-family: var(--mono); font-size: 0.72rem;
+  cursor: pointer; border-radius: 3px;
+}
+.btn-save {
+  background: var(--accent); color: #fff; border: none;
+  padding: 8px 20px; font-family: var(--mono); font-size: 0.72rem;
+  font-weight: 500; cursor: pointer; border-radius: 3px;
+}
+
+/* KANBAN DOTS */
+.dots { display: flex; gap: 4px; margin-bottom: 0; }
+.dot { width: 8px; height: 8px; border-radius: 50%; }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Application Tracker 📋</h1>
+    <p>// Chloe Wang · Fall 2026 Part-time & Intern Search</p>
+  </div>
+  <div class="header-stats">
+    <div class="hstat"><div class="hstat-num" id="stat-total">0</div><div class="hstat-lbl">TOTAL</div></div>
+    <div class="hstat"><div class="hstat-num" id="stat-applied">0</div><div class="hstat-lbl">APPLIED</div></div>
+    <div class="hstat"><div class="hstat-num" id="stat-interview">0</div><div class="hstat-lbl">INTERVIEW</div></div>
+    <div class="hstat"><div class="hstat-num" id="stat-offer">0</div><div class="hstat-lbl">OFFER 🎉</div></div>
+  </div>
+</header>
+
+<div class="toolbar">
+  <button class="btn-add" onclick="openModal()">+ Add Application</button>
+  <select class="filter-select" id="filterStatus" onchange="render()">
+    <option value="">All Status</option>
+    <option value="saved">Saved</option>
+    <option value="applied">Applied</option>
+    <option value="interview">Interview</option>
+    <option value="offer">Offer</option>
+    <option value="rejected">Rejected</option>
+    <option value="ghosted">Ghosted</option>
+  </select>
+  <input class="search-input" id="searchInput" placeholder="Search company or role..." oninput="render()">
+  <div class="toolbar-right" id="countLabel">0 applications</div>
+</div>
+
+<div class="table-wrap">
+  <table id="mainTable">
+    <thead>
+      <tr>
+        <th onclick="sortBy('company')">COMPANY ↕</th>
+        <th onclick="sortBy('role')">ROLE ↕</th>
+        <th>STATUS</th>
+        <th onclick="sortBy('date')">DATE ↕</th>
+        <th>SOURCE</th>
+        <th>LINK</th>
+        <th>NOTES</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+  </table>
+  <div class="empty" id="emptyState" style="display:none;">
+    <div class="empty-icon">📭</div>
+    <h3>No applications yet</h3>
+    <p>Click "+ Add Application" to log your first one</p>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="handleOverlayClick(event)">
+  <div class="modal">
+    <h2 id="modalTitle">Add Application</h2>
+    <div class="field-row">
+      <div class="field">
+        <label>Company *</label>
+        <input id="f-company" placeholder="e.g. Spotify" required>
+      </div>
+      <div class="field">
+        <label>Role *</label>
+        <input id="f-role" placeholder="e.g. Data Analyst Intern">
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label>Status</label>
+        <select id="f-status">
+          <option value="saved">Saved</option>
+          <option value="applied" selected>Applied</option>
+          <option value="interview">Interview</option>
+          <option value="offer">Offer 🎉</option>
+          <option value="rejected">Rejected</option>
+          <option value="ghosted">Ghosted</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Date Applied</label>
+        <input id="f-date" type="date">
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label>Source</label>
+        <select id="f-source">
+          <option value="">—</option>
+          <option>LinkedIn</option>
+          <option>Wellfound</option>
+          <option>Handshake</option>
+          <option>Simplify</option>
+          <option>Company Site</option>
+          <option>Referral</option>
+          <option>Indeed</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Job URL</label>
+        <input id="f-link" placeholder="https://..." type="url">
+      </div>
+    </div>
+    <div class="field">
+      <label>Notes</label>
+      <textarea id="f-notes" placeholder="Interview date, contact name, anything useful..."></textarea>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-save" onclick="saveApp()">Save</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let apps = [];
+let editingId = null;
+let sortKey = 'date';
+let sortDir = -1;
+
+const STATUS_LABELS = {
+  saved: 'Saved', applied: 'Applied', interview: 'Interview',
+  offer: 'Offer 🎉', rejected: 'Rejected', ghosted: 'Ghosted'
+};
+const STATUS_CLASS = {
+  saved: 's-saved', applied: 's-applied', interview: 's-interview',
+  offer: 's-offer', rejected: 's-rejected', ghosted: 's-ghosted'
+};
+
+function load() {
+  try {
+    const saved = localStorage.getItem('chloe_apps');
+    if (saved) apps = JSON.parse(saved);
+  } catch(e) {}
+}
+
+function save() {
+  try { localStorage.setItem('chloe_apps', JSON.stringify(apps)); } catch(e) {}
+}
+
+function render() {
+  const filter = document.getElementById('filterStatus').value;
+  const search = document.getElementById('searchInput').value.toLowerCase();
+
+  let filtered = apps.filter(a => {
+    const matchStatus = !filter || a.status === filter;
+    const matchSearch = !search ||
+      a.company.toLowerCase().includes(search) ||
+      a.role.toLowerCase().includes(search);
+    return matchStatus && matchSearch;
+  });
+
+  filtered.sort((a, b) => {
+    let av = a[sortKey] || '', bv = b[sortKey] || '';
+    return av < bv ? sortDir : av > bv ? -sortDir : 0;
+  });
+
+  const tbody = document.getElementById('tableBody');
+  const empty = document.getElementById('emptyState');
+
+  if (filtered.length === 0) {
+    tbody.innerHTML = '';
+    empty.style.display = 'block';
+  } else {
+    empty.style.display = 'none';
+    tbody.innerHTML = filtered.map(a => `
+      <tr>
+        <td class="td-company">${esc(a.company)}</td>
+        <td class="td-role">${esc(a.role)}</td>
+        <td><span class="status ${STATUS_CLASS[a.status]}">${STATUS_LABELS[a.status]}</span></td>
+        <td class="td-date">${a.date || '—'}</td>
+        <td class="td-date">${esc(a.source || '—')}</td>
+        <td class="td-link">${a.link ? `<a href="${esc(a.link)}" target="_blank">Link ↗</a>` : '—'}</td>
+        <td class="td-notes" title="${esc(a.notes || '')}">${esc(a.notes || '—')}</td>
+        <td class="td-actions">
+          <button class="btn-edit" onclick="editApp('${a.id}')">Edit</button>
+          <button class="btn-del" onclick="deleteApp('${a.id}')">✕</button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  // Update stats
+  document.getElementById('stat-total').textContent = apps.length;
+  document.getElementById('stat-applied').textContent = apps.filter(a => a.status === 'applied').length;
+  document.getElementById('stat-interview').textContent = apps.filter(a => a.status === 'interview').length;
+  document.getElementById('stat-offer').textContent = apps.filter(a => a.status === 'offer').length;
+  document.getElementById('countLabel').textContent = filtered.length + ' application' + (filtered.length !== 1 ? 's' : '');
+}
+
+function esc(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function sortBy(key) {
+  if (sortKey === key) sortDir *= -1;
+  else { sortKey = key; sortDir = 1; }
+  render();
+}
+
+function openModal(id) {
+  editingId = id || null;
+  const modal = document.getElementById('modalOverlay');
+  const title = document.getElementById('modalTitle');
+
+  if (id) {
+    const a = apps.find(x => x.id === id);
+    title.textContent = 'Edit Application';
+    document.getElementById('f-company').value = a.company;
+    document.getElementById('f-role').value = a.role;
+    document.getElementById('f-status').value = a.status;
+    document.getElementById('f-date').value = a.date || '';
+    document.getElementById('f-source').value = a.source || '';
+    document.getElementById('f-link').value = a.link || '';
+    document.getElementById('f-notes').value = a.notes || '';
+  } else {
+    title.textContent = 'Add Application';
+    document.getElementById('f-company').value = '';
+    document.getElementById('f-role').value = '';
+    document.getElementById('f-status').value = 'applied';
+    document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
+    document.getElementById('f-source').value = '';
+    document.getElementById('f-link').value = '';
+    document.getElementById('f-notes').value = '';
+  }
+  modal.classList.add('open');
+  setTimeout(() => document.getElementById('f-company').focus(), 100);
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  editingId = null;
+}
+
+function handleOverlayClick(e) {
+  if (e.target === document.getElementById('modalOverlay')) closeModal();
+}
+
+function saveApp() {
+  const company = document.getElementById('f-company').value.trim();
+  const role = document.getElementById('f-role').value.trim();
+  if (!company) { document.getElementById('f-company').focus(); return; }
+
+  const app = {
+    id: editingId || Date.now().toString(),
+    company,
+    role,
+    status: document.getElementById('f-status').value,
+    date: document.getElementById('f-date').value,
+    source: document.getElementById('f-source').value,
+    link: document.getElementById('f-link').value.trim(),
+    notes: document.getElementById('f-notes').value.trim(),
+  };
+
+  if (editingId) {
+    const idx = apps.findIndex(a => a.id === editingId);
+    apps[idx] = app;
+  } else {
+    apps.unshift(app);
+  }
+
+  save();
+  render();
+  closeModal();
+}
+
+function editApp(id) { openModal(id); }
+
+function deleteApp(id) {
+  if (!confirm('Delete this application?')) return;
+  apps = apps.filter(a => a.id !== id);
+  save();
+  render();
+}
+
+// Keyboard shortcut
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+  if ((e.metaKey || e.ctrlKey) && e.key === 'n') { e.preventDefault(); openModal(); }
+});
+
+load();
+render();
+</script>
+</body>
+</html>

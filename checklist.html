@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chloe's Recruiting Plan</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #f7f7f5; --bg2: #efefeb; --card: #fff;
+  --ink: #111; --ink2: #555; --ink3: #999;
+  --accent: #0a3d62; --accent-light: #e8eff6;
+  --green: #1a6b3a; --green-light: #e6f2eb;
+  --border: rgba(0,0,0,0.09);
+  --mono: 'IBM Plex Mono', monospace;
+  --sans: 'IBM Plex Sans', sans-serif;
+}
+body { font-family: var(--sans); background: var(--bg); color: var(--ink); min-height: 100vh; font-size: 16px; }
+header { background: var(--accent); padding: 1.5rem 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+header h1 { font-size: 1.15rem; font-weight: 600; color: #fff; letter-spacing: -0.02em; }
+header p { font-family: var(--mono); font-size: 0.78rem; color: rgba(255,255,255,0.6); margin-top: 3px; }
+.progress-wrap { text-align: right; }
+.progress-label { font-family: var(--mono); font-size: 0.72rem; color: rgba(255,255,255,0.6); margin-bottom: 5px; }
+.progress-bar-bg { width: 200px; height: 5px; background: rgba(255,255,255,0.2); border-radius: 3px; }
+.progress-bar { height: 5px; background: #7ec8a0; border-radius: 3px; transition: width 0.3s; }
+.progress-pct { font-family: var(--mono); font-size: 0.82rem; color: #7ec8a0; margin-top: 4px; font-weight: 500; }
+.tabs { display: flex; border-bottom: 1px solid var(--border); background: var(--card); padding: 0 2rem; overflow-x: auto; }
+.tab { padding: 1rem 1.4rem; font-size: 0.85rem; font-family: var(--mono); color: var(--ink3); cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap; transition: color 0.15s, border-color 0.15s; letter-spacing: 0.04em; }
+.tab:hover { color: var(--ink); }
+.tab.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 500; }
+main { max-width: 900px; margin: 0 auto; padding: 2rem; }
+.week-block { margin-bottom: 2.5rem; }
+.week-header { display: flex; align-items: center; gap: 12px; margin-bottom: 1rem; }
+.week-num { font-family: var(--mono); font-size: 0.75rem; color: var(--ink3); letter-spacing: 0.1em; }
+.week-title { font-size: 1.05rem; font-weight: 600; letter-spacing: -0.01em; }
+.week-goal { font-size: 0.82rem; color: var(--ink2); font-weight: 300; margin-left: auto; font-style: italic; }
+.day-card { background: var(--card); border: 1px solid var(--border); border-radius: 4px; margin-bottom: 10px; overflow: hidden; }
+.day-header { display: flex; align-items: center; gap: 12px; padding: 0.9rem 1.2rem; cursor: pointer; user-select: none; transition: background 0.1s; }
+.day-header:hover { background: var(--bg); }
+.day-date { font-family: var(--mono); font-size: 0.78rem; color: var(--ink3); min-width: 100px; }
+.day-label { font-size: 0.95rem; font-weight: 500; flex: 1; }
+.day-progress { font-family: var(--mono); font-size: 0.75rem; color: var(--ink3); }
+.day-toggle { font-size: 0.7rem; color: var(--ink3); transition: transform 0.2s; }
+.day-toggle.open { transform: rotate(90deg); }
+.day-tasks { padding: 0 1.2rem 1rem; border-top: 1px solid var(--border); display: none; }
+.day-tasks.open { display: block; }
+.add-task-bar { display: flex; gap: 8px; padding: 0.8rem 0 0.4rem; border-top: 1px dashed var(--border); margin-top: 0.5rem; }
+.add-task-input { flex: 1; font-family: var(--sans); font-size: 0.88rem; border: 1px solid var(--border); padding: 7px 10px; border-radius: 3px; background: var(--bg); color: var(--ink); outline: none; }
+.add-task-input:focus { border-color: var(--accent); background: #fff; }
+.add-task-select { font-family: var(--mono); font-size: 0.75rem; border: 1px solid var(--border); padding: 7px 8px; border-radius: 3px; background: var(--bg); color: var(--ink2); cursor: pointer; }
+.add-task-btn { font-family: var(--mono); font-size: 0.75rem; padding: 7px 14px; background: var(--accent); color: #fff; border: none; border-radius: 3px; cursor: pointer; white-space: nowrap; }
+.add-task-btn:hover { background: #0d4f7e; }
+.task { display: flex; align-items: flex-start; gap: 10px; padding: 0.65rem 0; border-bottom: 1px solid var(--bg2); }
+.task:last-of-type { border-bottom: none; }
+.task input[type=checkbox] { margin-top: 4px; flex-shrink: 0; cursor: pointer; accent-color: var(--green); width: 16px; height: 16px; }
+.task-body { flex: 1; display: flex; align-items: flex-start; gap: 8px; }
+.task-tag { font-family: var(--mono); font-size: 0.67rem; padding: 3px 7px; border-radius: 2px; flex-shrink: 0; margin-top: 3px; }
+.tag-sql { background: #e8f4fd; color: #1a6b9a; }
+.tag-apply { background: #fde8e3; color: #c94f2b; }
+.tag-prep { background: #f0e8fd; color: #6b2bc9; }
+.tag-build { background: var(--green-light); color: var(--green); }
+.tag-admin { background: var(--bg2); color: var(--ink3); }
+.task-text { font-size: 0.9rem; color: var(--ink2); line-height: 1.55; font-weight: 300; flex: 1; }
+.task-text.done { text-decoration: line-through; color: var(--ink3); }
+.task-text[contenteditable=true] { outline: none; background: #fffbe6; border-radius: 2px; padding: 1px 4px; color: var(--ink); }
+.task-del { font-size: 0.68rem; color: var(--ink3); cursor: pointer; padding: 2px 6px; border-radius: 2px; opacity: 0; transition: opacity 0.15s, background 0.15s; flex-shrink: 0; margin-top: 2px; border: none; background: transparent; }
+.task:hover .task-del { opacity: 1; }
+.task-del:hover { background: #fde8e3; color: #c94f2b; }
+.tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+.tool-card { background: var(--card); border: 1px solid var(--border); border-radius: 4px; padding: 1.1rem 1.3rem; }
+.tool-badge { display: inline-block; font-family: var(--mono); font-size: 0.65rem; padding: 2px 7px; border-radius: 2px; background: var(--green-light); color: var(--green); margin-bottom: 7px; }
+.tool-name { font-weight: 600; font-size: 0.98rem; margin-bottom: 4px; }
+.tool-url { font-family: var(--mono); font-size: 0.75rem; color: var(--accent); text-decoration: none; display: block; margin-bottom: 7px; }
+.tool-url:hover { text-decoration: underline; }
+.tool-desc { font-size: 0.85rem; color: var(--ink2); font-weight: 300; line-height: 1.55; }
+.stats-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+.stats-table thead tr { border-bottom: 2px solid var(--border); }
+.stats-table th { text-align: left; padding: 0.7rem; font-family: var(--mono); font-size: 0.75rem; color: var(--ink3); font-weight: 400; }
+.stats-table td { padding: 0.85rem 0.7rem; border-bottom: 1px solid var(--border); }
+.stats-table tr:nth-child(even) td { background: var(--bg); }
+.mono-td { font-family: var(--mono); font-size: 0.85rem; }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+.mindset-box { margin-top: 2rem; padding: 1.3rem 1.5rem; background: var(--green-light); border-radius: 4px; border-left: 3px solid var(--green); }
+.mindset-box h3 { font-size: 0.92rem; color: var(--green); margin-bottom: 5px; }
+.mindset-box p { font-size: 0.88rem; color: var(--ink2); line-height: 1.7; font-weight: 300; }
+.section-title { font-size: 1.05rem; font-weight: 600; margin-bottom: 1.5rem; letter-spacing: -0.01em; }
+.hint { font-family: var(--mono); font-size: 0.72rem; color: var(--ink3); margin-bottom: 1.5rem; }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>Chloe's Recruiting Plan 🎯</h1>
+    <p>// Goal: Fall 2026 Part-time / Intern · Start: May 29</p>
+  </div>
+  <div class="progress-wrap">
+    <div class="progress-label">OVERALL PROGRESS</div>
+    <div class="progress-bar-bg"><div class="progress-bar" id="globalBar" style="width:0%"></div></div>
+    <div class="progress-pct" id="globalPct">0% complete</div>
+  </div>
+</header>
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('plan',this)">📋 Daily Plan</div>
+  <div class="tab" onclick="switchTab('tools',this)">🛠 Tools</div>
+  <div class="tab" onclick="switchTab('tracker',this)">📊 Targets</div>
+</div>
+<main>
+<div class="tab-content active" id="tab-plan">
+  <p class="hint">// Double-click any task text to edit it · Click ✕ to delete · Use "+ Add" to add new tasks</p>
+  <div id="weeksContainer"></div>
+</div>
+<div class="tab-content" id="tab-tools">
+  <p class="section-title">🛠 Your Toolkit</p>
+  <div class="tools-grid">
+    <div class="tool-card"><div class="tool-badge">SQL PRACTICE</div><div class="tool-name">DataLemur</div><a href="https://datalemur.com" target="_blank" class="tool-url">datalemur.com</a><div class="tool-desc">Best for data analyst SQL prep. Real questions from Meta, Amazon, Google. Start Easy then Medium.</div></div>
+    <div class="tool-card"><div class="tool-badge">SQL PRACTICE</div><div class="tool-name">StrataScratch</div><a href="https://stratascratch.com" target="_blank" class="tool-url">stratascratch.com</a><div class="tool-desc">Good for pandas + SQL combined. Company-tagged questions. Free tier is enough.</div></div>
+    <div class="tool-card"><div class="tool-badge">RESUME</div><div class="tool-name">Resume Worded</div><a href="https://resumeworded.com" target="_blank" class="tool-url">resumeworded.com</a><div class="tool-desc">Upload PDF, get ATS score + specific feedback. Free version works.</div></div>
+    <div class="tool-card"><div class="tool-badge">JOB SEARCH</div><div class="tool-name">Wellfound</div><a href="https://wellfound.com" target="_blank" class="tool-url">wellfound.com</a><div class="tool-desc">Best for startup roles. Filter by part-time + NYC. Faster responses than LinkedIn.</div></div>
+    <div class="tool-card"><div class="tool-badge">JOB SEARCH</div><div class="tool-name">Simplify.jobs</div><a href="https://simplify.jobs" target="_blank" class="tool-url">simplify.jobs</a><div class="tool-desc">Aggregates intern/new grad postings. Good for volume applications.</div></div>
+    <div class="tool-card"><div class="tool-badge">INTERVIEW PREP</div><div class="tool-name">Exponent (YouTube)</div><a href="https://youtube.com/@tryexponent" target="_blank" class="tool-url">youtube.com/@tryexponent</a><div class="tool-desc">Free videos on product analytics cases and metric design. Watch 1 per day.</div></div>
+    <div class="tool-card"><div class="tool-badge">MOCK INTERVIEW</div><div class="tool-name">Pramp</div><a href="https://pramp.com" target="_blank" class="tool-url">pramp.com</a><div class="tool-desc">Free peer mock interviews. Do at least 3 SQL sessions before real interviews.</div></div>
+    <div class="tool-card"><div class="tool-badge">PROJECT DATA</div><div class="tool-name">Kaggle — Olist</div><a href="https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce" target="_blank" class="tool-url">kaggle.com (search: olist)</a><div class="tool-desc">Brazilian e-commerce dataset. 100K+ orders, great for SQL project with real JOINs.</div></div>
+    <div class="tool-card"><div class="tool-badge">VISUALIZATION</div><div class="tool-name">Tableau Public</div><a href="https://public.tableau.com" target="_blank" class="tool-url">public.tableau.com</a><div class="tool-desc">Free, publish dashboards publicly. Link from your portfolio site.</div></div>
+    <div class="tool-card"><div class="tool-badge">SCHOOL</div><div class="tool-name">Columbia Handshake</div><a href="https://columbia.joinhandshake.com" target="_blank" class="tool-url">columbia.joinhandshake.com</a><div class="tool-desc">Register before September. Best source for fall part-time roles targeting Columbia students.</div></div>
+    <div class="tool-card"><div class="tool-badge">YOUR SITE</div><div class="tool-name">Portfolio</div><a href="https://chloew1234.github.io" target="_blank" class="tool-url">chloew1234.github.io</a><div class="tool-desc">Your live portfolio. Keep updated as you add projects. Link everywhere.</div></div>
+    <div class="tool-card"><div class="tool-badge">TRACKING</div><div class="tool-name">App Tracker</div><a href="app_tracker.html" class="tool-url">app_tracker.html (open locally)</a><div class="tool-desc">Your application tracker. Log every job you apply to.</div></div>
+  </div>
+</div>
+<div class="tab-content" id="tab-tracker">
+  <p class="section-title">📊 Weekly Targets</p>
+  <table class="stats-table">
+    <thead><tr><th>WEEK</th><th>APPS TARGET</th><th>SQL TARGET</th><th>KEY MILESTONE</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Week 1</strong> (5/29–6/4)</td><td class="mono-td">20</td><td class="mono-td">25</td><td>All materials done, first apps sent</td></tr>
+      <tr><td><strong>Week 2</strong> (6/5–6/11)</td><td class="mono-td">20</td><td class="mono-td">35</td><td>SQL project started, Medium SQL</td></tr>
+      <tr><td><strong>Week 3–4</strong> (6/12–6/25)</td><td class="mono-td">40</td><td class="mono-td">80</td><td>SQL project live + Tableau dashboard</td></tr>
+      <tr><td><strong>Week 5–7</strong> (6/26–7/17)</td><td class="mono-td">60</td><td class="mono-td">100</td><td>First interviews hopefully coming in</td></tr>
+      <tr><td><strong>Week 8–10</strong> (7/18–8/7)</td><td class="mono-td">40</td><td class="mono-td">120</td><td>Mock interviews, take-home prep</td></tr>
+      <tr><td><strong>Week 11–13</strong> (8/8–8/31)</td><td class="mono-td">20</td><td class="mono-td">120+</td><td>Columbia Handshake push, close offers</td></tr>
+    </tbody>
+  </table>
+  <div class="mindset-box">
+    <h3>Mindset reminder</h3>
+    <p>5% reply rate is normal — 100 apps = 5 interviews. Track rejections like data, not failures. Columbia on your resume in September opens more doors. You have more than you think.</p>
+  </div>
+</div>
+</main>
+<script>
+const DEFAULT_WEEKS = [
+  { id:'w1', num:'WEEK 1', title:'Foundation', goal:'All materials ready + SQL starts', days:[
+    { id:'d1', date:'5/29 Fri', label:'Day 1 — Materials Setup', tasks:[
+      {tag:'admin',text:'Update resume: fix email → new Gmail, add Columbia, fix interests (bouldering), add website link, fix name spacing'},
+      {tag:'admin',text:'Save as Chloe_Wang_Resume.pdf → upload to resumeworded.com for ATS check'},
+      {tag:'admin',text:'LinkedIn: add About section, update email to Gmail, add Columbia Education'},
+      {tag:'admin',text:'GitHub: pin Professor Rating + NestAI to your profile'},
+      {tag:'apply',text:'Create application tracking spreadsheet: Company, Role, Link, Date, Status, Notes'},
+    ]},
+    { id:'d2', date:'5/30 Sat', label:'Day 2 — SQL Start + Job Search', tasks:[
+      {tag:'sql',text:'DataLemur: 5 Easy problems (SELECT, WHERE, GROUP BY basics)'},
+      {tag:'apply',text:'Search LinkedIn "data analyst intern fall NYC" — save 20 interesting companies'},
+      {tag:'apply',text:'Research companies, pick top 10 to target first'},
+      {tag:'prep',text:'Stats: write in your own words what p-value and confidence interval mean — no jargon'},
+    ]},
+    { id:'d3', date:'5/31 Sun', label:'Day 3 — SQL + Case + Project', tasks:[
+      {tag:'sql',text:'DataLemur: 5 Easy problems'},
+      {tag:'prep',text:'Watch 1 Exponent YouTube video on product analytics cases'},
+      {tag:'apply',text:'Search Wellfound for part-time data roles in NYC — add to spreadsheet'},
+      {tag:'prep',text:'Project: practice explaining Professor Rating out loud in under 3 min — problem, method, finding'},
+    ]},
+    { id:'d4', date:'6/1 Mon', label:'Day 4 — First Applications!', tasks:[
+      {tag:'sql',text:'DataLemur: 5 problems — start practicing JOIN'},
+      {tag:'apply',text:'Submit first 5 applications — customize resume summary for each JD'},
+      {tag:'prep',text:'Write STAR story #1 based on Professor Rating project'},
+      {tag:'prep',text:'Python: StrataScratch — 3 Easy pandas problems (groupby, dropna, value_counts)'},
+    ]},
+    { id:'d5', date:'6/2 Tue', label:'Day 5 — SQL JOINs + Behavioral', tasks:[
+      {tag:'sql',text:'DataLemur: 5 problems — JOIN + GROUP BY combined'},
+      {tag:'apply',text:'Submit 5 more applications'},
+      {tag:'prep',text:'Write STAR story #2 based on NestAI project'},
+      {tag:'prep',text:'Stats: explain A/B testing — what is a control group, what is statistical significance?'},
+    ]},
+    { id:'d6', date:'6/3 Wed', label:'Day 6 — Keep Going', tasks:[
+      {tag:'sql',text:'DataLemur: 5 problems'},
+      {tag:'apply',text:'Submit 5 applications + check email for replies'},
+      {tag:'prep',text:'Python: StrataScratch — 3 Easy pandas problems (merge, pivot_table, apply)'},
+      {tag:'prep',text:'Project: practice explaining NestAI in under 3 min — your role, how agent works, evaluation'},
+    ]},
+    { id:'d7', date:'6/4 Thu', label:'Day 7 — Week 1 Review', tasks:[
+      {tag:'sql',text:'Redo all SQL questions you got wrong this week'},
+      {tag:'apply',text:'Submit 5 applications + update tracking sheet'},
+      {tag:'prep',text:'Case: answer out loud — "How would you measure if a new LinkedIn feature is successful?"'},
+      {tag:'prep',text:'Week review: total apps sent? SQL count? Anything blocking you?'},
+    ]},
+  ]},
+  { id:'w2', num:'WEEK 2', title:'SQL Medium + Project Starts', goal:'Target: 40 total apps, 35 SQL done', days:[
+    { id:'d8', date:'6/5 Fri', label:'Day 8 — Window Functions', tasks:[
+      {tag:'sql',text:'DataLemur: 5 Medium problems — ROW_NUMBER, RANK'},
+      {tag:'apply',text:'Submit 5 applications'},
+      {tag:'build',text:'Download Brazilian E-Commerce dataset from Kaggle (Olist) — explore the tables'},
+      {tag:'prep',text:'Stats: explain OLS regression — what does the slope mean? what does R² mean?'},
+    ]},
+    { id:'d9', date:'6/6 Sat', label:'Day 9 — SQL Project Starts', tasks:[
+      {tag:'sql',text:'DataLemur: 5 Medium problems — LEAD/LAG'},
+      {tag:'build',text:'SQL Project: write queries 1–3 (total sales, monthly trend, top categories)'},
+      {tag:'prep',text:'Python: StrataScratch — 3 Medium pandas problems (groupby + agg, multi-column merge)'},
+    ]},
+    { id:'d10', date:'6/7 Sun', label:'Day 10 — Build + Apply', tasks:[
+      {tag:'sql',text:'DataLemur: 5 Medium problems'},
+      {tag:'build',text:'SQL Project: write queries 4–6 (customer retention, refund rate, regional breakdown)'},
+      {tag:'apply',text:'Submit 5 applications'},
+      {tag:'prep',text:'Case: "DAU dropped 20% overnight — how do you debug it?" — answer with full structure'},
+    ]},
+    { id:'d11', date:'6/8 Mon', label:'Day 11 — Project Push', tasks:[
+      {tag:'sql',text:'DataLemur: 5 Medium problems — CTEs'},
+      {tag:'build',text:'SQL Project: write queries 7–10'},
+      {tag:'apply',text:'Submit 5 applications'},
+      {tag:'prep',text:'Project: explain why AUROC 0.75 — is it good or bad? what does it mean in your context?'},
+    ]},
+    { id:'d12', date:'6/9 Tue', label:'Day 12 — Project Done', tasks:[
+      {tag:'sql',text:'DataLemur: 5 Medium problems'},
+      {tag:'build',text:'SQL Project: write README + push everything to GitHub'},
+      {tag:'apply',text:'Submit 5 applications'},
+      {tag:'prep',text:'Python: StrataScratch — 3 Medium pandas (window functions in pandas, transform)'},
+    ]},
+    { id:'d13', date:'6/10 Wed', label:'Day 13 — STAR + Stats', tasks:[
+      {tag:'sql',text:'DataLemur: 5 problems'},
+      {tag:'apply',text:'Submit 5 applications'},
+      {tag:'prep',text:'Write STAR story #3 from Zoellent internship — challenge, action, result'},
+      {tag:'prep',text:'Stats: explain class imbalance — how did you handle it in the pepper classification model?'},
+    ]},
+    { id:'d14', date:'6/11 Thu', label:'Day 14 — Week 2 Review', tasks:[
+      {tag:'sql',text:'Redo SQL problems you got wrong this week'},
+      {tag:'apply',text:'Submit 5 applications + update tracking sheet'},
+      {tag:'prep',text:'Week 2 review: SQL project on GitHub? 40 apps sent total? pandas started?'},
+      {tag:'prep',text:'Case: "How would you measure success of Spotify Discover Weekly?" — full answer'},
+    ]},
+  ]},
+  { id:'w3', num:'WEEK 3', title:'Tableau + Volume Up', goal:'Target: 60 total apps, dashboard live', days:[
+    { id:'d15', date:'6/12 Fri', label:'Day 15 — Tableau Starts', tasks:[
+      {tag:'sql',text:'DataLemur: 5 Medium problems'},
+      {tag:'apply',text:'Submit 6 applications — focus on fintech (Plaid, Brex, Ramp, Carta)'},
+      {tag:'build',text:'Tableau Public: connect SQL project results, start building dashboard'},
+      {tag:'prep',text:'Python: StrataScratch — 3 Medium pandas problems'},
+    ]},
+    { id:'d16', date:'6/13 Sat', label:'Day 16 — Dashboard Done', tasks:[
+      {tag:'sql',text:'DataLemur: 5 problems'},
+      {tag:'build',text:'Tableau: finish dashboard — at least 3 charts, publish to Tableau Public'},
+      {tag:'prep',text:'Stats: explain overfitting and regularization — why did you use them in Professor Rating?'},
+      {tag:'apply',text:'Submit 5 applications'},
+    ]},
+    { id:'d17', date:'6/14 Sun', label:'Day 17 — Portfolio Update', tasks:[
+      {tag:'sql',text:'DataLemur: 5 problems'},
+      {tag:'build',text:'Add SQL project as Project #3 on portfolio website — update index.html and push to GitHub'},
+      {tag:'apply',text:'Submit 5 applications'},
+      {tag:'prep',text:'Python: full mini EDA — take any CSV, clean it, write 3 findings, make 2 charts in 1.5 hours'},
+    ]},
+    { id:'d18', date:'6/15 Mon', label:'Day 18 — STAR #4 + Case', tasks:[
+      {tag:'sql',text:'DataLemur: 5 problems'},
+      {tag:'apply',text:'Submit 6 applications'},
+      {tag:'prep',text:'Write STAR story #4 from Synergetic Investment Fund internship'},
+      {tag:'prep',text:'Case: "What metrics would you track for an e-commerce checkout flow?" — structured answer'},
+    ]},
+    { id:'d19', date:'6/16 Tue', label:'Day 19 — pandas Medium', tasks:[
+      {tag:'sql',text:'DataLemur: 5 problems'},
+      {tag:'apply',text:'Submit 6 applications'},
+      {tag:'prep',text:'Python: StrataScratch — 3 Medium/Hard pandas problems (complex groupby, apply with lambda)'},
+      {tag:'prep',text:'Project: what are 3 limitations of your Professor Rating analysis? How would you fix them?'},
+    ]},
+    { id:'d20', date:'6/17 Wed', label:'Day 20 — Apply Heavy', tasks:[
+      {tag:'sql',text:'DataLemur: 5 problems'},
+      {tag:'apply',text:'Submit 8 applications — batch on Simplify.jobs'},
+      {tag:'prep',text:'Stats: explain precision vs recall tradeoff — when does each matter more?'},
+    ]},
+    { id:'d21', date:'6/18 Thu', label:'Day 21 — Week 3 Review', tasks:[
+      {tag:'sql',text:'Redo wrong SQL problems'},
+      {tag:'apply',text:'Submit 5 applications + update tracking sheet'},
+      {tag:'prep',text:'Behavioral: run all 4 STAR stories back to back — time each, under 2 min'},
+      {tag:'prep',text:'Week 3 review: dashboard live? Portfolio updated? 60 apps total?'},
+    ]},
+  ]},
+  { id:'w4', num:'WEEK 4', title:'Full Speed', goal:'Target: 80 total apps, 80 SQL done', days:[
+    { id:'d22', date:'6/19 Fri', label:'Day 22 — First Mock Interview', tasks:[
+      {tag:'sql',text:'DataLemur: 5 problems'},
+      {tag:'apply',text:'Submit 6 applications'},
+      {tag:'prep',text:'Mock mini-interview: 1 SQL question + 1 stats concept + 1 case — timed, no notes, 40 min total'},
+    ]},
+    { id:'d23', date:'6/20 Sat', label:'Day 23 — pandas Hard', tasks:[
+      {tag:'sql',text:'DataLemur: 5 problems'},
+      {tag:'apply',text:'Submit 5 applications'},
+      {tag:'prep',text:'Python: StrataScratch — 3 Hard pandas problems, write clean code as if in interview'},
+      {tag:'prep',text:'Project: NestAI — if the agent gives a wrong recommendation, how would you debug it?'},
+    ]},
+    { id:'d24', date:'6/21 Sun', label:'Day 24 — Stats Mastery', tasks:[
+      {tag:'sql',text:'DataLemur: 5 problems'},
+      {tag:'apply',text:'Submit 5 applications'},
+      {tag:'prep',text:'Stats flashcards: all 10 concepts — p-value, CI, t-test, AUROC, precision/recall, overfitting, bias-variance, A/B test, regression, logistic regression'},
+    ]},
+    { id:'d25', date:'6/22 Mon', label:'Day 25 — Apply Surge', tasks:[
+      {tag:'sql',text:'DataLemur: 5 problems'},
+      {tag:'apply',text:'Submit 8 applications — Handshake + LinkedIn + Wellfound all at once'},
+      {tag:'prep',text:'Case: "How would you design an A/B test for a new checkout button?" — full structured answer'},
+    ]},
+    { id:'d26', date:'6/23 Tue', label:'Day 26 — Take-home Sim', tasks:[
+      {tag:'sql',text:'DataLemur: 5 problems'},
+      {tag:'apply',text:'Submit 6 applications'},
+      {tag:'prep',text:'Simulate take-home: given e-commerce data, answer 4 business questions + write 1-page summary — 3 hour limit'},
+    ]},
+    { id:'d27', date:'6/24 Wed', label:'Day 27 — Pramp Session 1', tasks:[
+      {tag:'sql',text:'DataLemur: 5 problems'},
+      {tag:'apply',text:'Submit 6 applications'},
+      {tag:'prep',text:'Pramp.com: schedule and do your first mock SQL interview session'},
+      {tag:'prep',text:'After Pramp: write down every question asked while fresh'},
+    ]},
+    { id:'d28', date:'6/25 Thu', label:'Day 28 — Month 1 Review 🎉', tasks:[
+      {tag:'sql',text:'Redo hardest SQL problems from the month'},
+      {tag:'apply',text:'Submit 5 applications + full tracking sheet review'},
+      {tag:'prep',text:'Month 1 checkpoint: total apps? SQL count? Interviews? What is working, what to change?'},
+      {tag:'admin',text:'Confirm Columbia Handshake is registered — do it now if not done'},
+    ]},
+  ]},
+  { id:'w5', num:'WEEK 5', title:'Full Send', goal:'Target: 100 total apps, Pramp sessions', days:[
+    { id:'d29', date:'6/26 Fri', label:'Day 29 — Interview Ready Check', tasks:[
+      {tag:'sql',text:'DataLemur: 5 problems'},
+      {tag:'apply',text:'Submit 6 applications'},
+      {tag:'prep',text:'Full mock: SQL 20min + case 15min + behavioral 10min — timed, back to back'},
+    ]},
+    { id:'d30', date:'6/27 Sat', label:'Day 30 — EDA Deep Dive', tasks:[
+      {tag:'sql',text:'DataLemur: 5 problems'},
+      {tag:'apply',text:'Submit 5 applications'},
+      {tag:'prep',text:'Python: full EDA — clean dataset, analyze, write 5 findings, make 3 charts — done in 2.5 hours'},
+    ]},
+    { id:'d31', date:'6/28 Sun', label:'Day 31 — Case Focus', tasks:[
+      {tag:'sql',text:'DataLemur: 5 problems'},
+      {tag:'apply',text:'Submit 5 applications'},
+      {tag:'prep',text:'Case: "Instagram Stories usage dropped 15% — how do you investigate?" — full structured answer'},
+      {tag:'prep',text:'Stats: explain bias-variance tradeoff — when do you prefer more bias vs more variance?'},
+    ]},
+    { id:'d32', date:'6/29 Mon', label:'Day 32 — pandas + Apply', tasks:[
+      {tag:'sql',text:'DataLemur: 5 problems'},
+      {tag:'apply',text:'Submit 7 applications'},
+      {tag:'prep',text:'Python: StrataScratch — 3 Hard pandas problems'},
+    ]},
+    { id:'d33', date:'6/30 Tue', label:'Day 33 — Pramp Session 2', tasks:[
+      {tag:'sql',text:'DataLemur: 5 problems'},
+      {tag:'apply',text:'Submit 6 applications'},
+      {tag:'prep',text:'Pramp.com: second mock SQL interview — focus on talking through your thinking out loud'},
+    ]},
+    { id:'d34', date:'7/1 Wed', label:'Day 34 — Apply Heavy', tasks:[
+      {tag:'sql',text:'DataLemur: 5 problems'},
+      {tag:'apply',text:'Submit 8 applications — batch on Simplify.jobs + Wellfound'},
+      {tag:'prep',text:'Case: "How would you design metrics for Airbnb host quality?" — full answer'},
+    ]},
+    { id:'d35', date:'7/2 Thu', label:'Day 35 — Week 5 Review', tasks:[
+      {tag:'sql',text:'Redo wrong SQL problems'},
+      {tag:'apply',text:'Submit 5 applications + update tracking sheet'},
+      {tag:'prep',text:'Week 5 review: 100 apps sent total? Any interviews? What needs to change?'},
+    ]},
+  ]},
+  { id:'w6', num:'WEEK 6', title:'Keep Momentum', goal:'Target: 120 total apps, interview prep deep', days:[
+    { id:'d36', date:'7/3 Fri', label:'Day 36 — Stats Drill', tasks:[
+      {tag:'sql',text:'DataLemur: 5 problems'},
+      {tag:'apply',text:'Submit 6 applications'},
+      {tag:'prep',text:'Stats: can you explain every concept without notes? p-value, CI, A/B test, AUROC, precision/recall, overfitting'},
+    ]},
+    { id:'d37', date:'7/4 Sat', label:'Day 37 — Take-home Sim 2', tasks:[
+      {tag:'sql',text:'DataLemur: 5 problems'},
+      {tag:'prep',text:'Take-home simulation: given sales data, answer 5 business questions + executive summary — 3 hour limit'},
+      {tag:'apply',text:'Submit 4 applications'},
+    ]},
+    { id:'d38', date:'7/5 Sun', label:'Day 38 — Behavioral Polish', tasks:[
+      {tag:'sql',text:'DataLemur: 5 problems'},
+      {tag:'apply',text:'Submit 5 applications'},
+      {tag:'prep',text:'Behavioral: record yourself on all 4 STAR stories — watch back, tighten delivery'},
+      {tag:'prep',text:'Project: what is one thing you would add to Professor Rating if you had 2 more weeks?'},
+    ]},
+    { id:'d39', date:'7/6 Mon', label:'Day 39 — Case + SQL', tasks:[
+      {tag:'sql',text:'DataLemur: 5 problems'},
+      {tag:'apply',text:'Submit 6 applications'},
+      {tag:'prep',text:'Case: "What metrics would you use to evaluate a recommendation algorithm?" — full structured answer'},
+    ]},
+    { id:'d40', date:'7/7 Tue', label:'Day 40 — pandas Final Push', tasks:[
+      {tag:'sql',text:'DataLemur: 5 problems'},
+      {tag:'apply',text:'Submit 6 applications'},
+      {tag:'prep',text:'Python: StrataScratch — 3 Hard pandas problems, time yourself under 15 min each'},
+    ]},
+    { id:'d41', date:'7/8 Wed', label:'Day 41 — Pramp Session 3', tasks:[
+      {tag:'sql',text:'DataLemur: 5 problems'},
+      {tag:'apply',text:'Submit 6 applications'},
+      {tag:'prep',text:'Pramp.com: third mock SQL session — communication is as important as correctness'},
+    ]},
+    { id:'d42', date:'7/9 Thu', label:'Day 42 — Week 6 Review', tasks:[
+      {tag:'sql',text:'Redo wrong SQL problems'},
+      {tag:'apply',text:'Submit 5 applications + update tracking sheet'},
+      {tag:'prep',text:'Week 6 review: any interviews? Response rate improving? Adjust strategy if not'},
+    ]},
+  ]},
+  { id:'w7', num:'WEEK 7', title:'Interview Ready', goal:'Target: 140 total apps, fully prepped', days:[
+    { id:'d43', date:'7/10 Fri', label:'Day 43 — Full Mock Interview', tasks:[
+      {tag:'sql',text:'DataLemur: 5 problems'},
+      {tag:'apply',text:'Submit 6 applications'},
+      {tag:'prep',text:'Full mock: SQL 20min + case 15min + behavioral 10min + project questions 10min — record yourself'},
+    ]},
+    { id:'d44', date:'7/11 Sat', label:'Day 44 — Deep Project Review', tasks:[
+      {tag:'sql',text:'DataLemur: 5 problems'},
+      {tag:'prep',text:'Go through both projects line by line — be ready to explain every decision and method'},
+      {tag:'apply',text:'Submit 4 applications'},
+    ]},
+    { id:'d45', date:'7/12 Sun', label:'Day 45 — Rest + Review', tasks:[
+      {tag:'sql',text:'DataLemur: 3 problems — lighter day'},
+      {tag:'apply',text:'Submit 4 applications'},
+      {tag:'prep',text:'Review all stats concepts — write out each definition from memory'},
+    ]},
+    { id:'d46', date:'7/13 Mon', label:'Day 46 — Apply Surge', tasks:[
+      {tag:'sql',text:'DataLemur: 5 problems'},
+      {tag:'apply',text:'Submit 8 applications — Handshake + LinkedIn + Wellfound all at once'},
+      {tag:'prep',text:'Case: "Uber driver supply dropped in NYC — how do you diagnose and fix it?" — full answer'},
+    ]},
+    { id:'d47', date:'7/14 Tue', label:'Day 47 — pandas Clean Code', tasks:[
+      {tag:'sql',text:'DataLemur: 5 problems'},
+      {tag:'apply',text:'Submit 6 applications'},
+      {tag:'prep',text:'Python: write clean interview-style code for 3 Hard pandas problems — readable, commented'},
+    ]},
+    { id:'d48', date:'7/15 Wed', label:'Day 48 — Case Marathon', tasks:[
+      {tag:'sql',text:'DataLemur: 5 problems'},
+      {tag:'apply',text:'Submit 6 applications'},
+      {tag:'prep',text:'Case marathon: answer 3 cases back to back in 45 min — clarify → metrics → breakdown → recommendation'},
+    ]},
+    { id:'d49', date:'7/16 Thu', label:'Day 49 — Week 7 Review', tasks:[
+      {tag:'sql',text:'Redo hardest SQL problems'},
+      {tag:'apply',text:'Submit 5 applications + full tracking review'},
+      {tag:'prep',text:'Week 7 checkpoint: 140 apps sent? Any final rounds? Fully prepped for any interview format?'},
+    ]},
+  ]},
+  { id:'w8', num:'WEEK 8', title:'Interview Crunch', goal:'Target: First offer or final round', days:[
+    { id:'d50', date:'7/17 Fri', label:'Day 50 — Big Milestone 🎉', tasks:[
+      {tag:'sql',text:'DataLemur: 3 problems — maintenance mode'},
+      {tag:'apply',text:'Submit 5 applications'},
+      {tag:'prep',text:'50 days in — review everything: what worked, what did not, what to focus on final stretch'},
+    ]},
+    { id:'d51', date:'7/18 Sat', label:'Day 51 — Take-home Final', tasks:[
+      {tag:'sql',text:'DataLemur: 3 problems'},
+      {tag:'prep',text:'Full take-home simulation: messy dataset + 5 business questions + executive summary — 3 hour hard limit'},
+      {tag:'apply',text:'Submit 4 applications'},
+    ]},
+    { id:'d52', date:'7/19–7/23', label:'Week 8 Remaining Days', tasks:[
+      {tag:'sql',text:'Daily: 3 SQL problems — keep sharp'},
+      {tag:'apply',text:'Daily: 5 applications — research each company before applying'},
+      {tag:'prep',text:'If interview scheduled: 2 full days of prep — SQL, case, behavioral, project questions'},
+      {tag:'prep',text:'After each interview: write down every question asked within 1 hour'},
+    ]},
+  ]},
+  { id:'w9', num:'WEEK 9', title:'Close Offers', goal:'Target: 160 total apps, final rounds', days:[
+    { id:'d53', date:'7/24 Thu', label:'Day 53 — Interview Mode', tasks:[
+      {tag:'sql',text:'DataLemur: 3 problems — maintenance mode'},
+      {tag:'apply',text:'Submit 5 applications — Columbia Handshake focus'},
+      {tag:'prep',text:'If interview this week: dedicate 2 full days prep — SQL + case + behavioral + project'},
+    ]},
+    { id:'d54', date:'7/25 Fri', label:'Day 54 — Case Drill', tasks:[
+      {tag:'sql',text:'DataLemur: 3 problems'},
+      {tag:'apply',text:'Submit 5 applications'},
+      {tag:'prep',text:'Case: "How would you measure the ROI of a data science team?" — full structured answer'},
+      {tag:'prep',text:'After any interview: write down every question asked within 1 hour while fresh'},
+    ]},
+    { id:'d55', date:'7/26 Sat', label:'Day 55 — Take-home Drill', tasks:[
+      {tag:'sql',text:'DataLemur: 3 problems'},
+      {tag:'prep',text:'Take-home: given any dataset, produce full analysis + 1-page summary in under 3 hours'},
+      {tag:'apply',text:'Submit 4 applications'},
+    ]},
+    { id:'d56', date:'7/27 Sun', label:'Day 56 — Stats Review', tasks:[
+      {tag:'sql',text:'DataLemur: 3 problems'},
+      {tag:'apply',text:'Submit 4 applications'},
+      {tag:'prep',text:'Stats: go through all 10 flashcard concepts from memory — p-value, CI, AUROC, precision/recall, A/B test, overfitting, bias-variance, regression, logistic regression, classification'},
+    ]},
+    { id:'d57', date:'7/28 Mon', label:'Day 57 — Apply + Behavioral', tasks:[
+      {tag:'sql',text:'DataLemur: 3 problems'},
+      {tag:'apply',text:'Submit 6 applications'},
+      {tag:'prep',text:'Behavioral: all 4 STAR stories back to back — timed, under 2 min each, sharp and specific'},
+    ]},
+    { id:'d58', date:'7/29 Tue', label:'Day 58 — Python Review', tasks:[
+      {tag:'sql',text:'DataLemur: 3 problems'},
+      {tag:'apply',text:'Submit 5 applications'},
+      {tag:'prep',text:'Python: review your own Professor Rating code — explain every function, every parameter choice'},
+    ]},
+    { id:'d59', date:'7/30 Wed', label:'Day 59 — Mock Interview', tasks:[
+      {tag:'sql',text:'DataLemur: 3 problems'},
+      {tag:'apply',text:'Submit 5 applications'},
+      {tag:'prep',text:'Full mock: SQL 20min + case 15min + 2 behavioral questions 10min — record yourself'},
+    ]},
+    { id:'d60', date:'7/31 Thu', label:'Day 60 — Week 9 Review', tasks:[
+      {tag:'sql',text:'DataLemur: 3 problems'},
+      {tag:'apply',text:'Submit 4 applications + update tracking sheet'},
+      {tag:'prep',text:'Week 9 review: any offers? Final rounds? What is your current response rate?'},
+    ]},
+  ]},
+  { id:'w10', num:'WEEK 10', title:'Push to Finish Line', goal:'Target: Offer or final round in hand', days:[
+    { id:'d61', date:'8/1 Fri', label:'Day 61 — Apply Heavy', tasks:[
+      {tag:'sql',text:'DataLemur: 3 problems'},
+      {tag:'apply',text:'Submit 7 applications — Handshake + Wellfound + LinkedIn all at once'},
+      {tag:'prep',text:'Case: "How would you prioritize features for a data analytics dashboard?" — full answer'},
+    ]},
+    { id:'d62', date:'8/2 Sat', label:'Day 62 — Project Deep Dive', tasks:[
+      {tag:'sql',text:'DataLemur: 3 problems'},
+      {tag:'apply',text:'Submit 4 applications'},
+      {tag:'prep',text:'Go through NestAI architecture — explain every node, every tool, your evaluation framework'},
+      {tag:'prep',text:'Go through Professor Rating — every question, every method, every result, every limitation'},
+    ]},
+    { id:'d63', date:'8/3 Sun', label:'Day 63 — Rest + Light Review', tasks:[
+      {tag:'sql',text:'DataLemur: 2 problems — very light'},
+      {tag:'apply',text:'Submit 3 applications'},
+      {tag:'prep',text:'Review any interview feedback you have received — what to improve?'},
+    ]},
+    { id:'d64', date:'8/4 Mon', label:'Day 64 — Case Marathon', tasks:[
+      {tag:'sql',text:'DataLemur: 3 problems'},
+      {tag:'apply',text:'Submit 6 applications'},
+      {tag:'prep',text:'Case marathon: 3 cases back to back in 45 min — clarify → metrics → breakdown → recommendation'},
+    ]},
+    { id:'d65', date:'8/5 Tue', label:'Day 65 — SQL Hard Review', tasks:[
+      {tag:'sql',text:'DataLemur: go back to the hardest problems — redo any you got wrong throughout the summer'},
+      {tag:'apply',text:'Submit 5 applications'},
+      {tag:'prep',text:'Python: write clean interview-style pandas solution — readable, no shortcuts, explained'},
+    ]},
+    { id:'d66', date:'8/6 Wed', label:'Day 66 — Offer Check', tasks:[
+      {tag:'sql',text:'DataLemur: 3 problems'},
+      {tag:'apply',text:'Submit 5 applications'},
+      {tag:'prep',text:'If offer received: verify hours are part-time compatible with Columbia before accepting'},
+      {tag:'prep',text:'If no offer yet: do not panic — Columbia Handshake picks up in September'},
+    ]},
+    { id:'d67', date:'8/7 Thu', label:'Day 67 — Week 10 Review', tasks:[
+      {tag:'sql',text:'DataLemur: 3 problems'},
+      {tag:'apply',text:'Submit 4 applications + full tracking sheet review'},
+      {tag:'prep',text:'Week 10 review: total apps? Interviews completed? Offers? What to focus on final 3 weeks?'},
+    ]},
+  ]},
+  { id:'w11', num:'WEEK 11', title:'Final Stretch', goal:'Close offer or prep for Columbia career fair', days:[
+    { id:'d68', date:'8/8 Fri', label:'Day 68 — Handshake Focus', tasks:[
+      {tag:'sql',text:'DataLemur: 3 problems'},
+      {tag:'apply',text:'Submit 6 applications — focus 100% on Columbia Handshake now'},
+      {tag:'prep',text:'Update LinkedIn: add any new projects or experience from the summer'},
+    ]},
+    { id:'d69', date:'8/9 Sat', label:'Day 69 — Portfolio Final Update', tasks:[
+      {tag:'sql',text:'DataLemur: 3 problems'},
+      {tag:'apply',text:'Submit 4 applications'},
+      {tag:'build',text:'Final portfolio check: all project links work? GitHub READMEs complete? Email correct?'},
+    ]},
+    { id:'d70', date:'8/10 Sun', label:'Day 70 — Behavioral Final', tasks:[
+      {tag:'sql',text:'DataLemur: 3 problems'},
+      {tag:'apply',text:'Submit 4 applications'},
+      {tag:'prep',text:'Behavioral final run: all 4 STAR stories — crisp, specific, under 2 min each'},
+    ]},
+    { id:'d71', date:'8/11 Mon', label:'Day 71 — Apply + Case', tasks:[
+      {tag:'sql',text:'DataLemur: 3 problems'},
+      {tag:'apply',text:'Submit 6 applications'},
+      {tag:'prep',text:'Case: "How would you evaluate whether to expand a product to a new market?" — full answer'},
+    ]},
+    { id:'d72', date:'8/12 Tue', label:'Day 72 — Stats Final Check', tasks:[
+      {tag:'sql',text:'DataLemur: 3 problems'},
+      {tag:'apply',text:'Submit 5 applications'},
+      {tag:'prep',text:'Stats: can you answer every concept cold, no hesitation? If not, review the weak ones'},
+    ]},
+    { id:'d73', date:'8/13 Wed', label:'Day 73 — Mock + Apply', tasks:[
+      {tag:'sql',text:'DataLemur: 3 problems'},
+      {tag:'apply',text:'Submit 5 applications'},
+      {tag:'prep',text:'Final full mock interview: SQL + case + behavioral + project — treat it like the real thing'},
+    ]},
+    { id:'d74', date:'8/14 Thu', label:'Day 74 — Week 11 Review', tasks:[
+      {tag:'sql',text:'DataLemur: 3 problems'},
+      {tag:'apply',text:'Submit 4 applications + tracking sheet update'},
+      {tag:'prep',text:'Week 11 review: offer in hand? If yes, evaluate. If no, Columbia career fair is coming — keep going'},
+    ]},
+  ]},
+  { id:'w12', num:'WEEK 12', title:'Columbia Countdown', goal:'2 weeks to Columbia — keep applying', days:[
+    { id:'d75', date:'8/15 Fri', label:'Day 75 — Keep Going', tasks:[
+      {tag:'sql',text:'DataLemur: 3 problems'},
+      {tag:'apply',text:'Submit 5 applications — do not stop even if tired'},
+      {tag:'admin',text:'If no offer by today: reframe — Columbia career fair in September is a fresh start with a stronger resume'},
+    ]},
+    { id:'d76', date:'8/16 Sat', label:'Day 76 — Light Day', tasks:[
+      {tag:'sql',text:'DataLemur: 2 problems'},
+      {tag:'apply',text:'Submit 3 applications'},
+      {tag:'prep',text:'Rest and recharge — you have been working hard for 11 weeks'},
+    ]},
+    { id:'d77', date:'8/17 Sun', label:'Day 77 — Prep for Columbia', tasks:[
+      {tag:'sql',text:'DataLemur: 3 problems'},
+      {tag:'apply',text:'Submit 4 applications'},
+      {tag:'admin',text:'Research Columbia career resources — what events, fairs, and recruiting timelines exist?'},
+    ]},
+    { id:'d78', date:'8/18 Mon', label:'Day 78 — Apply + Case', tasks:[
+      {tag:'sql',text:'DataLemur: 3 problems'},
+      {tag:'apply',text:'Submit 5 applications — Handshake + Wellfound'},
+      {tag:'prep',text:'Case: one more full case practice — pick any topic, full structure, 15 min'},
+    ]},
+    { id:'d79', date:'8/19 Tue', label:'Day 79 — Python Polish', tasks:[
+      {tag:'sql',text:'DataLemur: 3 problems'},
+      {tag:'apply',text:'Submit 4 applications'},
+      {tag:'prep',text:'Python: review pandas and be able to do groupby + merge + pivot fluently without looking anything up'},
+    ]},
+    { id:'d80', date:'8/20 Wed', label:'Day 80 — Apply Heavy', tasks:[
+      {tag:'sql',text:'DataLemur: 3 problems'},
+      {tag:'apply',text:'Submit 7 applications — last big push before Columbia starts'},
+      {tag:'prep',text:'Project: final practice — explain both projects fluently, confidently, under 3 min each'},
+    ]},
+    { id:'d81', date:'8/21 Thu', label:'Day 81 — Week 12 Review', tasks:[
+      {tag:'sql',text:'DataLemur: 3 problems'},
+      {tag:'apply',text:'Submit 4 applications + tracking sheet update'},
+      {tag:'prep',text:'Week 12 review: how many total applications? What is the response rate? Any pending interviews?'},
+    ]},
+  ]},
+  { id:'w13', num:'WEEK 13', title:'Final Week Before Columbia', goal:'Wrap up, set up for September success', days:[
+    { id:'d82', date:'8/22 Fri', label:'Day 82 — Final Push', tasks:[
+      {tag:'sql',text:'DataLemur: 3 problems'},
+      {tag:'apply',text:'Submit 5 applications'},
+      {tag:'admin',text:'Make sure Columbia email is set up and Handshake profile is complete'},
+    ]},
+    { id:'d83', date:'8/23 Sat', label:'Day 83 — Light Day', tasks:[
+      {tag:'sql',text:'DataLemur: 2 problems'},
+      {tag:'apply',text:'Submit 3 applications'},
+      {tag:'prep',text:'Rest — you are almost at Columbia, save energy for the new start'},
+    ]},
+    { id:'d84', date:'8/24 Sun', label:'Day 84 — Portfolio Check', tasks:[
+      {tag:'sql',text:'DataLemur: 2 problems'},
+      {tag:'build',text:'Final portfolio review: everything up to date, all links working, professional email everywhere'},
+      {tag:'apply',text:'Submit 3 applications'},
+    ]},
+    { id:'d85', date:'8/25 Mon', label:'Day 85 — Keep Applying', tasks:[
+      {tag:'sql',text:'DataLemur: 3 problems'},
+      {tag:'apply',text:'Submit 4 applications — Handshake focus'},
+      {tag:'prep',text:'If offer: negotiate confidently — you have Columbia starting, that is leverage'},
+    ]},
+    { id:'d86', date:'8/26 Tue', label:'Day 86 — Finish Strong', tasks:[
+      {tag:'sql',text:'DataLemur: 3 problems'},
+      {tag:'apply',text:'Submit 4 applications'},
+      {tag:'prep',text:'Final behavioral run: all 4 STAR stories one last time'},
+    ]},
+    { id:'d87', date:'8/27 Wed', label:'Day 87 — Almost There', tasks:[
+      {tag:'sql',text:'DataLemur: 3 problems'},
+      {tag:'apply',text:'Submit 4 applications'},
+      {tag:'admin',text:'Prepare for Columbia orientation — research schedule, plan how to balance school + job search'},
+    ]},
+    { id:'d88', date:'8/28–8/31', label:'Day 88-91 — Final Days', tasks:[
+      {tag:'apply',text:'Keep applying — do not stop until you have an offer'},
+      {tag:'admin',text:'Columbia starts September — your resume gets stronger immediately, keep the momentum'},
+      {tag:'prep',text:'You have done 88+ days of consistent work — you are ready. Trust the process.'},
+    ]},
+  ]},
+];
+
+let state = { weeks: null, checks: {}, openDays: {} };
+
+function loadState() {
+  // Clear old cache versions
+  localStorage.removeItem('chloe_checklist_v2');
+  localStorage.removeItem('chloe_plan');
+  try {
+    const saved = localStorage.getItem('chloe_plan_v4');
+    if (saved) { const p = JSON.parse(saved); state.weeks = p.weeks || JSON.parse(JSON.stringify(DEFAULT_WEEKS)); state.checks = p.checks || {}; state.openDays = p.openDays || {}; }
+    else { state.weeks = JSON.parse(JSON.stringify(DEFAULT_WEEKS)); }
+  } catch(e) { state.weeks = JSON.parse(JSON.stringify(DEFAULT_WEEKS)); }
+}
+
+function saveState() { try { localStorage.setItem('chloe_plan_v4', JSON.stringify(state)); } catch(e) {} }
+
+function tid(wid, did, i) { return wid+'__'+did+'__'+i; }
+function tagCls(tag) { return {sql:'tag-sql',apply:'tag-apply',prep:'tag-prep',build:'tag-build',admin:'tag-admin'}[tag]||'tag-admin'; }
+
+function renderAll() {
+  const c = document.getElementById('weeksContainer');
+  c.innerHTML = '';
+  state.weeks.forEach(week => {
+    const wb = document.createElement('div'); wb.className = 'week-block';
+    wb.innerHTML = `<div class="week-header"><span class="week-num">${week.num}</span><span class="week-title">${week.title}</span><span class="week-goal">${week.goal}</span></div>`;
+    week.days.forEach(day => {
+      const isOpen = state.openDays[day.id] || false;
+      const total = day.tasks.length;
+      const done = day.tasks.filter((_,i) => state.checks[tid(week.id,day.id,i)]).length;
+      const card = document.createElement('div'); card.className = 'day-card';
+      card.innerHTML = `
+        <div class="day-header" data-wid="${week.id}" data-did="${day.id}">
+          <span class="day-date">${day.date}</span>
+          <span class="day-label">${day.label}</span>
+          <span class="day-progress" id="dp-${day.id}" style="color:${done===total&&total>0?'var(--green)':''}">${done===total&&total>0?'✓ Done':done+'/'+total}</span>
+          <span class="day-toggle ${isOpen?'open':''}">▶</span>
+        </div>
+        <div class="day-tasks ${isOpen?'open':''}" id="dt-${day.id}">
+          <div id="tl-${week.id}-${day.id}"></div>
+          <div class="add-task-bar">
+            <select class="add-task-select" id="sel-${week.id}-${day.id}">
+              <option value="sql">SQL</option><option value="apply" selected>APPLY</option>
+              <option value="prep">PREP</option><option value="build">BUILD</option><option value="admin">ADMIN</option>
+            </select>
+            <input class="add-task-input" id="inp-${week.id}-${day.id}" placeholder="Add a new task...">
+            <button class="add-task-btn" data-wid="${week.id}" data-did="${day.id}">+ Add</button>
+          </div>
+        </div>`;
+      card.querySelector('.day-header').addEventListener('click', () => toggleDay(week.id, day.id));
+      card.querySelector('.add-task-btn').addEventListener('click', function() { addTask(this.dataset.wid, this.dataset.did); });
+      card.querySelector(`#inp-${week.id}-${day.id}`).addEventListener('keydown', e => { if(e.key==='Enter') addTask(week.id, day.id); });
+      const tl = card.querySelector(`#tl-${week.id}-${day.id}`);
+      day.tasks.forEach((task, i) => {
+        const taskId = tid(week.id, day.id, i);
+        const checked = state.checks[taskId] || false;
+        const el = document.createElement('div'); el.className = 'task';
+        el.innerHTML = `<input type="checkbox" ${checked?'checked':''}><div class="task-body"><span class="task-tag ${tagCls(task.tag)}">${task.tag.toUpperCase()}</span><span class="task-text ${checked?'done':''}" data-wid="${week.id}" data-did="${day.id}" data-idx="${i}" title="Double-click to edit">${task.text}</span><button class="task-del" data-wid="${week.id}" data-did="${day.id}" data-idx="${i}">✕</button></div>`;
+        el.querySelector('input').addEventListener('change', function() {
+          state.checks[taskId] = this.checked;
+          el.querySelector('.task-text').classList.toggle('done', this.checked);
+          updateProgress(); saveState(); updateDP(week.id, day.id);
+        });
+        const txt = el.querySelector('.task-text');
+        txt.addEventListener('dblclick', function() {
+          this.contentEditable='true'; this.focus();
+          const r=document.createRange(); r.selectNodeContents(this);
+          window.getSelection().removeAllRanges(); window.getSelection().addRange(r);
+        });
+        txt.addEventListener('blur', function() {
+          this.contentEditable='false';
+          const w=state.weeks.find(x=>x.id===this.dataset.wid), d=w.days.find(x=>x.id===this.dataset.did);
+          d.tasks[parseInt(this.dataset.idx)].text = this.textContent.trim();
+          saveState();
+        });
+        txt.addEventListener('keydown', function(e) { if(e.key==='Enter'){e.preventDefault();this.blur();} });
+        el.querySelector('.task-del').addEventListener('click', function() { deleteTask(this.dataset.wid, this.dataset.did, parseInt(this.dataset.idx)); });
+        tl.appendChild(el);
+      });
+      wb.appendChild(card);
+    });
+    c.appendChild(wb);
+  });
+  updateProgress();
+}
+
+function toggleDay(wid, did) {
+  state.openDays[did] = !state.openDays[did]; saveState();
+  document.getElementById('dt-'+did)?.classList.toggle('open', state.openDays[did]);
+  document.querySelector(`[data-wid="${wid}"][data-did="${did}"] .day-toggle`)?.classList.toggle('open', state.openDays[did]);
+}
+
+function updateDP(wid, did) {
+  const w=state.weeks.find(x=>x.id===wid), d=w.days.find(x=>x.id===did);
+  const total=d.tasks.length, done=d.tasks.filter((_,i)=>state.checks[tid(wid,did,i)]).length;
+  const el=document.getElementById('dp-'+did);
+  if(el){ el.textContent=done===total&&total>0?'✓ Done':done+'/'+total; el.style.color=done===total&&total>0?'var(--green)':''; }
+}
+
+function updateProgress() {
+  let total=0,done=0;
+  state.weeks.forEach(w=>w.days.forEach(d=>d.tasks.forEach((_,i)=>{ total++; if(state.checks[tid(w.id,d.id,i)])done++; })));
+  const pct=total>0?Math.round(done/total*100):0;
+  document.getElementById('globalBar').style.width=pct+'%';
+  document.getElementById('globalPct').textContent=pct+'% complete';
+}
+
+function addTask(wid, did) {
+  const inp=document.getElementById('inp-'+wid+'-'+did), sel=document.getElementById('sel-'+wid+'-'+did);
+  const text=inp.value.trim(); if(!text)return;
+  const w=state.weeks.find(x=>x.id===wid), d=w.days.find(x=>x.id===did);
+  d.tasks.push({tag:sel.value,text}); inp.value='';
+  state.openDays[did]=true; saveState(); renderAll();
+  document.getElementById('dt-'+did)?.classList.add('open');
+}
+
+function deleteTask(wid, did, idx) {
+  const w=state.weeks.find(x=>x.id===wid), d=w.days.find(x=>x.id===did);
+  const newChecks={};
+  Object.entries(state.checks).forEach(([k,v])=>{
+    const p=k.split('__');
+    if(p[0]===wid&&p[1]===did){ const i=parseInt(p[2]); if(i<idx)newChecks[k]=v; else if(i>idx)newChecks[wid+'__'+did+'__'+(i-1)]=v; }
+    else newChecks[k]=v;
+  });
+  state.checks=newChecks; d.tasks.splice(idx,1); state.openDays[did]=true; saveState(); renderAll();
+  document.getElementById('dt-'+did)?.classList.add('open');
+}
+
+function switchTab(tab, el) {
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active'); document.getElementById('tab-'+tab).classList.add('active');
+}
+
+loadState(); renderAll();
+</script>
+</body>
+</html>
